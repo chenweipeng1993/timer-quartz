@@ -1,4 +1,4 @@
-package com.peng.quartz;
+package com.peng.quartz.simpleScheduler.demo1;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
