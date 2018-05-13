@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class HelloScheduler {
-    public static void main(String[] args) throws SchedulerException {
+    public static void main(String[] args) throws SchedulerException, InterruptedException {
         //打印当前时间
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -33,11 +33,23 @@ public class HelloScheduler {
         //创建Schedule调度器实例
         SchedulerFactory schedulerFactory = new StdSchedulerFactory();
         Scheduler scheduler = schedulerFactory.getScheduler();
+        //启动scheduler
         scheduler.start();
 
         //scheduler调度器绑定jobdetail和trigger 触发器
-        scheduler.scheduleJob(jobDetail,trigger);
+        System.out.println("scheduled time is :"+sdf.format(scheduler.scheduleJob(jobDetail,trigger)));
+        //scheduler执行两秒后挂起
+        Thread.sleep(2000L);
+        //挂起
+        scheduler.standby();
 
+        //scheduler挂起三秒后继续执行
+        Thread.sleep(3000L);
+        scheduler.start();
 
+        Thread.sleep(2000L);
+        //传入参数是true表是等待所有正在执行的job执行完毕之后，在关闭scheduler
+        //传入false表是立即关闭
+        scheduler.shutdown(true);
     }
 }
